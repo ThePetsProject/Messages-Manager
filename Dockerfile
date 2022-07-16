@@ -5,6 +5,7 @@ WORKDIR /app
 
 COPY package*.json /app/
 COPY tsconfig*.json /app/
+COPY newrelic.js /app/
 
 RUN npm ci --quiet
 
@@ -18,6 +19,8 @@ WORKDIR /app
 COPY --from=prebuild /app/package*.json /app/
 RUN npm install --quiet --production
 COPY --from=prebuild /app/build /app/build
+
+RUN curl -Ls https://download.newrelic.com/install/newrelic-cli/scripts/install.sh | bash && sudo NEW_RELIC_API_KEY=NRAK-TDAW4KUECLPWDV5B6FE5W2R3JGI NEW_RELIC_ACCOUNT_ID=3558430 /usr/local/bin/newrelic install -n logs-integration
 
 EXPOSE 80
 
