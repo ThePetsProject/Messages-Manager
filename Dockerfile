@@ -7,6 +7,9 @@ COPY package*.json /app/
 COPY tsconfig*.json /app/
 COPY newrelic.js /app/
 
+RUN apk --no-cache add curl
+RUN apk --no-cache add bash
+
 RUN npm ci --quiet
 
 COPY src /app/src
