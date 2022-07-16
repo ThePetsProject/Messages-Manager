@@ -2,7 +2,6 @@ import express from 'express'
 import cors, { CorsOptions } from 'cors'
 import { routesArray } from './infrastructure/routes'
 import dotenv from 'dotenv'
-require('newrelic')
 
 dotenv.config()
 
