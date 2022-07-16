@@ -9,7 +9,7 @@ const app = express()
 const router = express.Router()
 
 const corsOptions: CorsOptions = {
-  origin: 'https://thepetsproject.tk',
+  origin: 'https://thepetsproject.org',
   optionsSuccessStatus: 200,
 }
 
@@ -17,6 +17,6 @@ app.use(cors())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 
-app.use('/api/v1/account/login', routesArray(router))
+app.use('/api/v1/messaging', routesArray(router))
 
 export default app

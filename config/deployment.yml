@@ -1,39 +1,39 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: account-login-manager-service
+  name: messages-manager-service
   labels:
-    app: account-login-manager-service
+    app: messages-manager-service
 spec:
   ports:
   - port: 80
     name: http
-    targetPort: 3100
+    targetPort: 3700
   # - port: 443
   #   name: https
-  #   targetPort: 3100
+  #   targetPort: 3700
   selector:
-    app: account-login-manager
+    app: messages-manager
 ---
 apiVersion: v1
 imagePullSecrets:
 - name: tpp-registry
 kind: ServiceAccount
 metadata:
-  name: account-login-manager-service-account
+  name: messages-manager-service-account
   namespace: default
 ---    
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: account-login-manager
+  name: messages-manager
   labels:
-    app: account-login-manager
+    app: messages-manager
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: account-login-manager
+      app: messages-manager
   strategy:
     rollingUpdate:
       maxSurge: 1
@@ -42,45 +42,33 @@ spec:
   template:
     metadata:
       labels:
-        app: account-login-manager
+        app: messages-manager
       annotations:
         vault.hashicorp.com/agent-inject: 'true'
-        vault.hashicorp.com/role: 'account-login-manager'
-        vault.hashicorp.com/agent-inject-secret-mongostring.txt: 'kv/data/account-login-manager/production'
-        vault.hashicorp.com/agent-inject-template-mongostring.txt: |
-          {{- with secret "kv/data/account-login-manager/production" -}}
-          {{ .Data.data.mongoString }}
+        vault.hashicorp.com/role: 'messages-manager'
+        vault.hashicorp.com/agent-inject-secret-mailData.json: 'kv/data/messages-manager/production'
+        vault.hashicorp.com/agent-inject-template-mailData.json: |
+          {{- with secret "kv/data/messages-manager/production" -}}
+          {{ .Data.data.mailData }}
           {{- end -}}
     spec:
-      serviceAccountName: account-login-manager-service-account
+      serviceAccountName: messages-manager-service-account
       containers:
-      - name: account-login-manager
+      - name: messages-manager
         image: <IMAGE>
         imagePullPolicy: "Always"
         env:
           - name: PORT
-            value: "3100"
-          - name: MONGO_STRING_FILE_PATH
+            value: "3700"
+          - name: SECRETS_PATH
             value: /vault/secrets/
-          - name: JWT_MANAGER_URL
-            value: http://jwt-manager-service
-          - name: JWT_MANAGER_SET_PATH
-            value: api/v1/jwt
         ports:
-        - containerPort: 3100
+        - containerPort: 3700
           name: sbp-port
         resources:
           requests:
-            cpu: "1"
-            memory: 256Mi
+            cpu: "0.1"
+            memory: 100Mi
           limits:
-            cpu: "1"
-            memory: 512Mi
-        volumeMounts:
-        - name: mongo-ca-certificate
-          mountPath: "/etc/certs"
-          readOnly: true
-      volumes:
-      - name: mongo-ca-certificate
-        secret:
-          secretName: mongo-ca-certificate.cer
+            cpu: "0.5"
+            memory: 256Mi

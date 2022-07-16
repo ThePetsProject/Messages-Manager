@@ -4,10 +4,10 @@ import * as healthMethods from '.'
 import projectProperties from '@utils/project_properties'
 import { Response } from 'express'
 
-const baseRoute = '/api/v1/account/login'
+const baseRoute = '/api/v1/messaging'
 const { formatTime, healthHandler } = healthMethods
 
-describe('Health route', () => {
+describe('Health', () => {
   let request: supertest.SuperTest<supertest.Test>
 
   beforeAll(() => {
