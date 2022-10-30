@@ -21,7 +21,7 @@ export const pwdRecoveryHandler = async (
 
   if (!(toEmail?.length && recoverUrl?.length)) return res.sendStatus(400)
 
-  const secretsPath = process.env.SECRETS_PATH
+  const secretsPath = process.env.VAULT_SECRETS_FILE_PATH
   const mongoDataFile = `${secretsPath}mailData.json`
   const mongoData = JSON.parse(fs.readFileSync(mongoDataFile, 'utf-8'))
 
