@@ -4,7 +4,7 @@ import fs from 'fs'
 import nodemailer from 'nodemailer'
 import { GoogleApis } from 'googleapis'
 
-process.env.SECRETS_PATH = 'fakepath'
+process.env.VAULT_SECRETS_FILE_PATH = 'fakepath'
 
 const baseRoute = '/api/v1/account/login'
 const { pwdRecoveryHandler } = pwdRecoveryModules
